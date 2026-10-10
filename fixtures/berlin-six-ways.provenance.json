@@ -1,0 +1,58 @@
+{
+  "fixture": "berlin-six-ways.osm",
+  "kind": "real OSM snapshot; selected ways only",
+  "acquired_utc": "2026-10-10T05:07:12.771333+00:00",
+  "way_ids": [
+    23853131,
+    23853133,
+    234463917,
+    51912365,
+    113595955,
+    16873017
+  ],
+  "responses": [
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/23853131/full",
+      "sha256": "4f0f1bc0d29a4da798df580a8e70918f4700406ab8356df276d5f6a761957c99",
+      "bytes": 4332
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/23853133/full",
+      "sha256": "977be00db9233d5d5cda75f0b75999007fc5e9087ed3b27510c363b13f4562c3",
+      "bytes": 7186
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/234463917/full",
+      "sha256": "1ce11bd7c6d37ee4b3319c819a0e7b337d86ae5e97837dc2dd5fd0610ddf9352",
+      "bytes": 5725
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/51912365/full",
+      "sha256": "4cc93b9ddd8ff166399ef055b383ed19d68522c0fcf0dcfd9eca18c642482874",
+      "bytes": 1910
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/113595955/full",
+      "sha256": "8862c253e8c54b79712cac7e84e018edc69ff9fd7ba5b12e2d9454dc5cfbfdac",
+      "bytes": 1610
+    },
+    {
+      "url": "https://api.openstreetmap.org/api/0.6/way/16873017/full",
+      "sha256": "f8259a5b8e61f49c7920c30d5caab56bbe0de0057356ce504f3c4e7cf5508656",
+      "bytes": 1259
+    }
+  ],
+  "sha256": "480ddb9155d0fb644a37748cb9df79be065f49796ba89f2b9081b037f955e988",
+  "bytes": 15365,
+  "bbox": [
+    13.4032566,
+    52.5188549,
+    13.407900699999999,
+    52.5221983
+  ],
+  "attribution": "\u00a9 OpenStreetMap contributors",
+  "license": "ODbL-1.0",
+  "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "copyright_url": "https://www.openstreetmap.org/copyright",
+  "transformation": "Union of six /way/{id}/full responses. Removed user, uid and changeset attributes; retained IDs, versions, timestamps, coordinates, references and tags. No geometry changes."
+}

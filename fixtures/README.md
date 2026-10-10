@@ -1,0 +1,62 @@
+# Fixture provenance and licenses
+
+## Synthetic
+
+`synthetic.osm` is **invented data**, centered near longitude/latitude zero. It is
+not an extract from OpenStreetMap and must not be represented as a real place.
+Regenerate it with `python3 scripts/make_synthetic.py`. The fixture intentionally
+includes a hostile-looking name as inert text, invalid/self-intersecting and
+unclosed footprints, a missing reference, a bridge, a boundary crossing, and an
+unsupported relation. Expected export: 5 features, 6 omission diagnostics using
+bbox `-0.0009 -0.0009 0.0009 0.0009`.
+
+The synthetic XML and generated benchmark inputs are dedicated to the public
+domain under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
+The generator scripts have the repository's MIT code license.
+
+The benchmark generator, `scripts/generate_workload.py`, produces a reproducible
+1,000-building grid. It is synthetic too; its bbox is `-.006 -.006 .006 .006`.
+It needs no acquisition and is regenerated during verification.
+
+## Real OpenStreetMap snapshot
+
+`berlin-six-ways.osm` is a deliberately small union of **six selected real OSM
+ways and their referenced nodes**, around Berlin. It is not a complete area
+extract, and absence of a feature says nothing about the real neighborhood.
+
+- Acquired: 2026-10-10 UTC.
+- Bytes: 15,365.
+- SHA-256: `480ddb9155d0fb644a37748cb9df79be065f49796ba89f2b9081b037f955e988`.
+- Source way IDs: 23853131, 23853133, 234463917, 51912365, 113595955, 16873017.
+- Expected export: 6 features, plus 4 tagged-node omission diagnostics.
+- Exact bbox, acquisition time, six URLs, response byte lengths/hashes, retained
+  attributes, and transformations: [`berlin-six-ways.provenance.json`](berlin-six-ways.provenance.json).
+
+The acquisition helper downloads each explicit `/api/0.6/way/{id}/full`, merges
+repeated elements, and strips contributor account/changeset attributes. It keeps
+IDs, versions, timestamps, coordinates, references, and tags. Geometry is unchanged.
+An initial bounded area-request attempt exceeded a 2 MB acquisition cap and was
+not used as this fixture; the explicit-way procedure is the reproducible method.
+
+Optional **online acquisition** into a new directory:
+
+```sh
+python3 scripts/acquire_fixture.py --output /tmp/new-osm-snapshot
+```
+
+The remote map changes. This command acquires a **new snapshot**, not necessarily
+the checked-in bytes. Use the committed extract/hash for exact experiment
+reproduction. The offline CLI and verification do not run acquisition. Response
+caps/timeouts are built into the helper; it never purchases data or uses credentials.
+
+## Attribution and redistribution
+
+**© OpenStreetMap contributors.** The real extract is distributed under the
+[Open Data Commons Open Database License, version 1.0](https://opendatacommons.org/licenses/odbl/1-0/)
+(ODbL-1.0). See [OpenStreetMap copyright and attribution](https://www.openstreetmap.org/copyright).
+Retain attribution and the license notice when redistributing the extract.
+ODbL attribution/share-alike obligations can also apply to adapted databases;
+produced works must provide the relevant attribution. Consult the linked license
+for the complete terms. The source XML is supplied so recipients can inspect
+and reproduce the derived example geometry. The MIT code license does not
+replace or remove the data license. These are license notices, not legal advice.

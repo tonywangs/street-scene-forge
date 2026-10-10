@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Street Scene Forge · Offline scene inspector</title>
+<link rel="stylesheet" href="style.css">
+<script src="data.js" defer></script><script src="preview.js" defer></script>
+</head>
+<body>
+<header><div><p class="eyebrow">LOCAL DATA / METRIC GEOMETRY</p><h1>Street Scene Forge</h1><p>Inspect a small piece of the map. Understand every assumption.</p></div><span class="badge">OFFLINE SCENE</span></header>
+<main>
+<section class="scene" aria-labelledby="scene-title">
+<div class="bar"><h2 id="scene-title">Neighborhood model</h2><span id="summary">Loading scene…</span></div>
+<canvas id="scene" tabindex="0" aria-label="Interactive 3D neighborhood. Arrow keys orbit, plus and minus zoom, Page Up and Page Down tilt, brackets select features, Home resets." aria-describedby="help"></canvas>
+<div class="controls"><button id="left" aria-label="Rotate left">↶ Rotate</button><button id="right" aria-label="Rotate right">Rotate ↷</button><button id="in" aria-label="Zoom in">+ Zoom</button><button id="out" aria-label="Zoom out">− Zoom</button><button id="reset">Reset view</button><label>Elevation <input id="tilt" type="range" min="15" max="85" value="40"></label></div>
+<p id="help">Drag to orbit · scroll to zoom · click a feature to inspect. Keyboard: arrows orbit, +/− zoom, Page Up/Down tilt, [ and ] select, Home resets.</p>
+<p id="camera" class="muted"></p>
+</section>
+<aside aria-labelledby="details-title"><p class="eyebrow">FEATURE INSPECTOR</p><h2 id="details-title">Source & dimensions</h2><p id="selection" role="status" aria-live="polite">Choose a feature in the model or table.</p><pre id="details">No feature selected.</pre></aside>
+<section class="inventory" aria-labelledby="inventory-title"><div class="bar"><h2 id="inventory-title">Feature inventory</h2><label>Filter <input id="filter" type="search" placeholder="ID, name or kind"></label></div><p>Every modeled feature is available here without using the 3D view.</p><div class="table-scroll"><table><caption>Modeled OSM ways and dimensional assumptions</caption><thead><tr><th scope="col">Source ID</th><th scope="col">Name</th><th scope="col">Kind</th><th scope="col">Dimension</th><th scope="col">Source</th></tr></thead><tbody id="features"></tbody></table></div></section>
+<section class="provenance"><h2>Provenance & omissions</h2><p id="attribution"></p><p>Flat terrain and approximate dimensions. This is an incomplete map interpretation, not a survey or complete city reconstruction. Roads use independent segment ribbons.</p><details><summary>Input fingerprint, projection & limits</summary><pre id="provenance"></pre></details><details><summary id="omission-summary">Omitted source features</summary><pre id="omissions"></pre></details><p><a href="scene.glb" download>Download GLB</a> · <a href="manifest.json" download>Download manifest</a></p></section>
+</main><footer>Street Scene Forge / 0.1.0 · No tiles, external assets, or network requests.</footer>
+</body></html>

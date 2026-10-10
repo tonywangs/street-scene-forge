@@ -1,0 +1,32 @@
+test_deleted_and_unclosed (tests.test_forge.ContractTests.test_deleted_and_unclosed) ... ok
+test_elevation_and_parts_excluded (tests.test_forge.ContractTests.test_elevation_and_parts_excluded) ... ok
+test_empty_and_unsupported (tests.test_forge.ContractTests.test_empty_and_unsupported) ... ok
+test_geographic_and_resource_limits (tests.test_forge.ContractTests.test_geographic_and_resource_limits) ... ok
+test_height_precedence (tests.test_forge.ContractTests.test_height_precedence) ... ok
+test_input_order_does_not_change_mesh (tests.test_forge.ContractTests.test_input_order_does_not_change_mesh) ... ok
+test_invalid_dimensions_not_silently_defaulted (tests.test_forge.ContractTests.test_invalid_dimensions_not_silently_defaulted) ... ok
+test_invalid_xml_and_entities (tests.test_forge.ContractTests.test_invalid_xml_and_entities) ... ok
+test_relations_prevent_hole_filling (tests.test_forge.ContractTests.test_relations_prevent_hole_filling) ... ok
+test_width_defaults_and_unsupported_highways (tests.test_forge.ContractTests.test_width_defaults_and_unsupported_highways) ... ok
+test_240_seeded_concave_extrusions_and_narrow_roads (tests.test_forge.GeometryCases.test_240_seeded_concave_extrusions_and_narrow_roads) ... ok
+test_64_seeded_boundary_cases (tests.test_forge.GeometryCases.test_64_seeded_boundary_cases) ... ok
+test_80_seeded_invalid_intersections_and_missing_nodes (tests.test_forge.GeometryCases.test_80_seeded_invalid_intersections_and_missing_nodes) ... ok
+test_boundary_inclusive_and_outside (tests.test_forge.GeometryCases.test_boundary_inclusive_and_outside) ... ok
+test_degenerate_backtrack_and_touching (tests.test_forge.GeometryCases.test_degenerate_backtrack_and_touching) ... ok
+test_float32_collapse_is_explicitly_omitted (tests.test_forge.GeometryCases.test_float32_collapse_is_explicitly_omitted) ... ok
+test_forward_collinear_and_duplicates (tests.test_forge.GeometryCases.test_forward_collinear_and_duplicates) ... ok
+test_reversed_winding_identical_glb (tests.test_forge.GeometryCases.test_reversed_winding_identical_glb) ... ok
+test_road_duplicate_points (tests.test_forge.GeometryCases.test_road_duplicate_points) ... ok
+test_cli_wall_clock_timeout_during_write (tests.test_forge.LifecycleTests.test_cli_wall_clock_timeout_during_write) ... ok
+test_collision_preserves_existing_and_symlink (tests.test_forge.LifecycleTests.test_collision_preserves_existing_and_symlink) ... ok
+test_fifo_rejected_without_blocking (tests.test_forge.LifecycleTests.test_fifo_rejected_without_blocking) ... ok
+test_output_limits_cleanup (tests.test_forge.LifecycleTests.test_output_limits_cleanup) ... ok
+test_real_sigterm_during_write (tests.test_forge.LifecycleTests.test_real_sigterm_during_write) ... ok
+test_repeat_byte_identity_and_unchanged_input (tests.test_forge.LifecycleTests.test_repeat_byte_identity_and_unchanged_input) ... ok
+test_serialization_failure_no_output (tests.test_forge.LifecycleTests.test_serialization_failure_no_output) ... ok
+test_write_failure_and_keyboard_interrupt_cleanup (tests.test_forge.LifecycleTests.test_write_failure_and_keyboard_interrupt_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 1.530s
+
+OK

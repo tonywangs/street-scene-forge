@@ -1,0 +1,234 @@
+{
+  "installed_zipapp_bytes": 42656,
+  "method": "Installed zipapp, isolated working directory, Python socket operations denied by tested audit hook. Browser offline=true plus aborting external HTTP/WebSocket requests. No acquisition in verification.",
+  "node": "v24.20.0",
+  "package_lock_sha256": "b114522859468617d066a92a162578ef98adca73e81c6c4c590f60d172dadd2b",
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "schema_version": 1,
+  "seeded_cases": {
+    "boundary": 64,
+    "invalid_intersection_and_missing_reference": 80,
+    "valid_building_and_road": 240
+  },
+  "seeds": {
+    "boundary": 88173,
+    "invalid_geometry": 71023,
+    "valid_geometry": 20261010
+  },
+  "workloads": {
+    "bounded": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 1793375,
+          "sha256": "8affe665e8c00b46544109ee13b1144d04f9485a4de3e8bd573b05b951983887"
+        },
+        "index.html": {
+          "bytes": 3288,
+          "sha256": "7862054bdb4f1e86fa8bc82c0b583457d1d597be81631db46c564e599d7f5873"
+        },
+        "manifest.json": {
+          "bytes": 471168,
+          "sha256": "f373ecaf6b3a1a8e9d85673f17c3e49e4525660f5512c4b42883d85f105137d0"
+        },
+        "preview.js": {
+          "bytes": 9099,
+          "sha256": "3a3c0c44392d200b394ba68d94cdbed80cbeaa72f1e215194111d9aba101cef8"
+        },
+        "scene.glb": {
+          "bytes": 946512,
+          "sha256": "234be2d619a1a68909fcdcbba76994fa21a3370761f02758bfd7c7a4fe68f284"
+        },
+        "style.css": {
+          "bytes": 2769,
+          "sha256": "65dfe4191b85445e6b8d9bea7f240a2bcf990ec836ec90e3d5f1ea1870c8d0b6"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.74,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 1.1368683772161603e-13,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 1000
+      },
+      "input_bytes": 449805,
+      "input_sha256": "7f25685fb8e760cfd4ab84004566df7efc23142ef41f02ce07b91686d5247d2f",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {},
+      "peak_process_rss_kib": 37208,
+      "totals": {
+        "features": 1000,
+        "triangles": 12000,
+        "vertices": 8000
+      },
+      "wall_seconds": 0.7447330639697611
+    },
+    "empty": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 1494,
+          "sha256": "d66eb5c5a266625221b62e93d73e2653876dacdaa57a471d35c21cc88c1667e6"
+        },
+        "index.html": {
+          "bytes": 3288,
+          "sha256": "7862054bdb4f1e86fa8bc82c0b583457d1d597be81631db46c564e599d7f5873"
+        },
+        "manifest.json": {
+          "bytes": 1155,
+          "sha256": "49ce55862e97eb8899dcbdbf851b766110ec527401fb4beee2b845af6c890583"
+        },
+        "preview.js": {
+          "bytes": 9099,
+          "sha256": "3a3c0c44392d200b394ba68d94cdbed80cbeaa72f1e215194111d9aba101cef8"
+        },
+        "scene.glb": {
+          "bytes": 112,
+          "sha256": "70bd78100310104875b2791326a0101f0c4c6b6363c5576479e1710f18a1956d"
+        },
+        "style.css": {
+          "bytes": 2769,
+          "sha256": "65dfe4191b85445e6b8d9bea7f240a2bcf990ec836ec90e3d5f1ea1870c8d0b6"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.2,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 0.0,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 0
+      },
+      "input_bytes": 20,
+      "input_sha256": "00248d758596638fa8fd370c577e4856bf1368db33a1396c61be0eb80dd5c310",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {},
+      "peak_process_rss_kib": 20608,
+      "totals": {
+        "features": 0,
+        "triangles": 0,
+        "vertices": 0
+      },
+      "wall_seconds": 0.20573674468323588
+    },
+    "real": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 24328,
+          "sha256": "d97ded9262fe3f9048454703eee7ee88130c1e85926cfa8299d34505a69b28d8"
+        },
+        "index.html": {
+          "bytes": 3288,
+          "sha256": "7862054bdb4f1e86fa8bc82c0b583457d1d597be81631db46c564e599d7f5873"
+        },
+        "manifest.json": {
+          "bytes": 6317,
+          "sha256": "460473212dc03aa80ba3d8969d692abd07a8e4c791de2b456452450176be5c38"
+        },
+        "preview.js": {
+          "bytes": 9099,
+          "sha256": "3a3c0c44392d200b394ba68d94cdbed80cbeaa72f1e215194111d9aba101cef8"
+        },
+        "scene.glb": {
+          "bytes": 12912,
+          "sha256": "de432810965184559f565b9845203f4865917f2cdf0704ebb57408c4071d060a"
+        },
+        "style.css": {
+          "bytes": 2769,
+          "sha256": "65dfe4191b85445e6b8d9bea7f240a2bcf990ec836ec90e3d5f1ea1870c8d0b6"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.22,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 6.210182164068101e-06,
+        "max_dimension_float32_error_m": 8.790915359657703e-06,
+        "meshes": 6
+      },
+      "input_bytes": 15365,
+      "input_sha256": "480ddb9155d0fb644a37748cb9df79be065f49796ba89f2b9081b037f955e988",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "standalone_node_not_rendered": 4
+      },
+      "peak_process_rss_kib": 20788,
+      "totals": {
+        "features": 6,
+        "triangles": 310,
+        "vertices": 194
+      },
+      "wall_seconds": 0.2229752643033862
+    },
+    "synthetic": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 11972,
+          "sha256": "452ac34f18ab924c3070332b84214c291316cfd5235e9a08f49dc274acfeea28"
+        },
+        "index.html": {
+          "bytes": 3288,
+          "sha256": "7862054bdb4f1e86fa8bc82c0b583457d1d597be81631db46c564e599d7f5873"
+        },
+        "manifest.json": {
+          "bytes": 4404,
+          "sha256": "54750c71dc9903c247b623ced2b22741f22018384d9cbcfcb5d0fba39105b7ec"
+        },
+        "preview.js": {
+          "bytes": 9099,
+          "sha256": "3a3c0c44392d200b394ba68d94cdbed80cbeaa72f1e215194111d9aba101cef8"
+        },
+        "scene.glb": {
+          "bytes": 5228,
+          "sha256": "1ec9739c4d9002b0df18bc783f9672b9307a5dfc9ef63acf8d615e0b36c372b4"
+        },
+        "style.css": {
+          "bytes": 2769,
+          "sha256": "65dfe4191b85445e6b8d9bea7f240a2bcf990ec836ec90e3d5f1ea1870c8d0b6"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.18,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 3.0252396925334324e-06,
+        "max_dimension_float32_error_m": 1.5258789062277955e-06,
+        "meshes": 5
+      },
+      "input_bytes": 4052,
+      "input_sha256": "ba7f200c4012c40b4568522cc86fa0725522970520020fd27b9b27caeae35391",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "elevation_dependent_feature": 1,
+        "missing_node_reference": 1,
+        "outside_extent": 1,
+        "self_intersection": 1,
+        "unclosed_building": 1,
+        "unsupported_relation": 1
+      },
+      "peak_process_rss_kib": 20608,
+      "totals": {
+        "features": 5,
+        "triangles": 50,
+        "vertices": 40
+      },
+      "wall_seconds": 0.18624349310994148
+    }
+  }
+}

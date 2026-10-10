@@ -1,0 +1,20 @@
+{
+  "browser": "156.0.8078.4",
+  "playwright": "1.64.0",
+  "mode": "real",
+  "load_ms": 337.04986499999995,
+  "features": 6,
+  "triangles": 310,
+  "external_attempts": [],
+  "page_errors": [],
+  "csp_violations": [],
+  "checks": [
+    "file:// load with browser offline and external requests blocked",
+    "GLB triangle count and accessible table correspondence",
+    "camera controls change rendered pixels and reset",
+    "keyboard orbit, tilt, zoom, reset; pointer drag and wheel",
+    "keyboard feature cycling, table Enter selection and Tab navigation",
+    "source fingerprint and dimensions visible",
+    "mobile viewport has no page overflow"
+  ]
+}

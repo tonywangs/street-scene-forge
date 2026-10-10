@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="street-scene-forge synthetic fixture">
+  <note>SYNTHETIC DATA. Invented geometry near 0,0. CC0-1.0.</note>
+  <node id="1" lon="-0.0004946262" lat="-0.0001798641" />
+  <node id="2" lon="-0.0001798641" lat="-0.0001798641" />
+  <node id="3" lon="-0.0001798641" lat="0.0001348981" />
+  <node id="4" lon="-0.0003147621" lat="0.0001348981" />
+  <node id="5" lon="-0.0003147621" lat="-0.0000449660" />
+  <node id="6" lon="-0.0004946262" lat="-0.0000449660" />
+  <way id="101">
+    <nd ref="1" />
+    <nd ref="2" />
+    <nd ref="3" />
+    <nd ref="4" />
+    <nd ref="5" />
+    <nd ref="6" />
+    <nd ref="1" />
+    <tag k="building" v="yes" />
+    <tag k="name" v="Corner workshop" />
+    <tag k="height" v="12 m" />
+  </way>
+  <node id="7" lon="0.0000449660" lat="-0.0001798641" />
+  <node id="8" lon="0.0003147621" lat="-0.0001798641" />
+  <node id="9" lon="0.0003147621" lat="0.0000449660" />
+  <node id="10" lon="0.0000449660" lat="0.0000449660" />
+  <way id="102">
+    <nd ref="7" />
+    <nd ref="8" />
+    <nd ref="9" />
+    <nd ref="10" />
+    <nd ref="7" />
+    <tag k="building" v="apartments" />
+    <tag k="name" v="Sample apartments" />
+    <tag k="building:levels" v="5" />
+  </way>
+  <node id="11" lon="0.0000449660" lat="0.0002697961" />
+  <node id="12" lon="0.0001798641" lat="0.0002697961" />
+  <node id="13" lon="0.0001798641" lat="0.0004046942" />
+  <node id="14" lon="0.0000449660" lat="0.0004046942" />
+  <way id="103">
+    <nd ref="11" />
+    <nd ref="12" />
+    <nd ref="13" />
+    <nd ref="14" />
+    <nd ref="11" />
+    <tag k="building" v="yes" />
+    <tag k="name" v="&lt;/script&gt;&lt;img src=https://invalid.example/x onerror=&quot;window.HOSTILE=1&quot;&gt; &amp; &quot;quoted&quot;" />
+    <tag k="__proto__" v="inert source tag" />
+  </way>
+  <node id="15" lon="-0.0006744903" lat="0.0001798641" />
+  <node id="16" lon="0.0000000000" lat="0.0001798641" />
+  <node id="17" lon="0.0006744903" lat="0.0001798641" />
+  <way id="201">
+    <nd ref="15" />
+    <nd ref="16" />
+    <nd ref="17" />
+    <tag k="highway" v="residential" />
+    <tag k="name" v="Invented street" />
+  </way>
+  <node id="18" lon="0.0004046942" lat="-0.0004946262" />
+  <node id="19" lon="0.0004046942" lat="0.0004946262" />
+  <way id="202">
+    <nd ref="18" />
+    <nd ref="19" />
+    <tag k="highway" v="footway" />
+    <tag k="width" v="0.4" />
+    <tag k="name" v="Narrow path" />
+  </way>
+  <node id="20" lon="-0.0005845582" lat="0.0003597281" />
+  <node id="21" lon="-0.0004496602" lat="0.0004946262" />
+  <node id="22" lon="-0.0005845582" lat="0.0004946262" />
+  <node id="23" lon="-0.0004496602" lat="0.0003597281" />
+  <way id="301">
+    <nd ref="20" />
+    <nd ref="21" />
+    <nd ref="22" />
+    <nd ref="23" />
+    <nd ref="20" />
+    <tag k="building" v="yes" />
+  </way>
+  <way id="302">
+    <tag k="building" v="yes" />
+    <nd ref="99998" />
+    <nd ref="99999" />
+    <nd ref="99997" />
+    <nd ref="99998" />
+  </way>
+  <node id="24" lon="-0.0002697961" lat="-0.0004496602" />
+  <node id="25" lon="-0.0000899320" lat="-0.0004496602" />
+  <way id="303">
+    <nd ref="24" />
+    <nd ref="25" />
+    <tag k="highway" v="service" />
+    <tag k="bridge" v="yes" />
+  </way>
+  <node id="26" lon="0.0008093883" lat="-0.0004496602" />
+  <node id="27" lon="0.0010791844" lat="-0.0004496602" />
+  <node id="28" lon="0.0010791844" lat="-0.0002697961" />
+  <node id="29" lon="0.0008093883" lat="-0.0002697961" />
+  <way id="304">
+    <nd ref="26" />
+    <nd ref="27" />
+    <nd ref="28" />
+    <nd ref="29" />
+    <nd ref="26" />
+    <tag k="building" v="yes" />
+  </way>
+  <node id="30" lon="-0.0005395922" lat="-0.0005395922" />
+  <node id="31" lon="-0.0003597281" lat="-0.0005395922" />
+  <node id="32" lon="-0.0003597281" lat="-0.0003597281" />
+  <way id="305">
+    <nd ref="30" />
+    <nd ref="31" />
+    <nd ref="32" />
+    <tag k="building" v="yes" />
+  </way>
+  <relation id="401">
+    <tag k="type" v="multipolygon" />
+    <tag k="building" v="yes" />
+  </relation>
+</osm>
