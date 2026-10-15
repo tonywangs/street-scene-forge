@@ -92,6 +92,42 @@ const {chromium} = require('playwright');
       assert.match(await page.locator('#selection').textContent(), /way\/102/);
       checks.push('hostile imported HTML displayed only as text', 'table filter', 'canvas triangle picking selects roof feature');
     }
+    if (mode === 'courtyard') {
+      await page.getByRole('button', {name: 'relation/900', exact: true}).click();
+      const details = await page.locator('#details').textContent();
+      assert.match(details, /source_members/); assert.match(details, /member_way_ids/);
+      assert.match(details, /"role": "inner"/); assert.match(details, /<\/script><img/);
+      assert.equal(await page.locator('img').count(), 0);
+      assert.equal(await page.evaluate(() => window.HOSTILE), undefined);
+      await page.locator('#tilt').evaluate(e => {e.value='85';e.dispatchEvent(new Event('input'));});
+      // Screen samples follow the documented projection of the explicit synthetic
+      // roof (-40,7,0) and courtyard floor (0,0,0), independently of triangles.
+      const samples = await canvas.evaluate(c => {
+        const scale=Math.min(c.clientWidth,c.clientHeight)*.7/100;
+        const yaw=-.55, tilt=85*Math.PI/180;
+        const project=(x,y,z)=>[c.clientWidth/2+(x*Math.cos(yaw)-z*Math.sin(yaw))*scale,
+          c.clientHeight/2+((x*Math.sin(yaw)+z*Math.cos(yaw))*Math.sin(tilt)-(y-3.5)*Math.cos(tilt))*scale];
+        const roof=project(-40,7,0),hole=project(0,0,0);
+        const pixel=p=>Array.from(c.getContext('2d').getImageData(Math.round(p[0]*c.width/c.clientWidth),Math.round(p[1]*c.height/c.clientHeight),1,1).data).slice(0,3);
+        return {roof,hole,roofPixel:pixel(roof),holePixel:pixel(hole)};
+      });
+      assert.deepEqual(samples.roofPixel,[237,183,91]);
+      assert.notDeepEqual(samples.holePixel,[237,183,91]);
+      assert.ok([[212,223,220],[182,199,193]].some(c=>c.every((v,i)=>Math.abs(v-samples.holePixel[i])<=3)), JSON.stringify(samples));
+      // Reset selection so both hit and miss checks can actually fail.
+      await page.reload(); await page.locator('#scene[data-rendered="true"]').waitFor();
+      await page.locator('#tilt').evaluate(e => {e.value='85';e.dispatchEvent(new Event('input'));});
+      await canvas.click({position:{x:samples.hole[0],y:samples.hole[1]}});
+      assert.match(await page.locator('#selection').textContent(), /Choose a feature/);
+      await canvas.click({position:{x:samples.roof[0],y:samples.roof[1]}});
+      assert.match(await page.locator('#selection').textContent(), /relation\/900/);
+      await page.locator('#omission-summary').focus(); await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#omissions').isVisible(), true);
+      assert.match(await page.locator('#omissions').textContent(), /unsupported_relation/);
+      assert.match(await page.locator('#omissions').textContent(), /consumed_relation_member/);
+      checks.push('courtyard ground pixels remain visible through roof and bottom', 'canvas relation picking and courtyard miss from empty selection',
+        'relation and member provenance; consumed-member and unsupported diagnostics', 'hostile relation text remains inert');
+    }
     await page.getByText('Input fingerprint, projection & limits', {exact:true}).click();
     assert.match(await page.locator('#provenance').textContent(), new RegExp(manifest.input.sha256));
     checks.push('source fingerprint and dimensions visible');

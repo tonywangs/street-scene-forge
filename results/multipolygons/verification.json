@@ -1,0 +1,578 @@
+{
+  "fixture_corpus_sha256": "933cb713e6451b599fdb751567ff2e165e2fc183e880523df6ef3fad95fdba89",
+  "independent_geometry": {
+    "geos": "3.13.1",
+    "numpy": "2.2.6",
+    "shapely": "2.1.2"
+  },
+  "installed_zipapp_bytes": 73988,
+  "method": "Installed zipapp, isolated working directory, Python socket operations denied by tested audit hook. Browser offline=true plus aborting external HTTP/WebSocket requests. No acquisition in verification.",
+  "node": "v24.20.0",
+  "package_lock_sha256": "b114522859468617d066a92a162578ef98adca73e81c6c4c590f60d172dadd2b",
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "schema_version": 1,
+  "seeded_cases": {
+    "boundary": 64,
+    "invalid_intersection_and_missing_reference": 80,
+    "invalid_relation": 64,
+    "multipolygon_boundary": 32,
+    "multipolygon_geos": 250,
+    "valid_building_and_road": 240
+  },
+  "seeds": {
+    "boundary": 88173,
+    "invalid_geometry": 71023,
+    "invalid_relation": 139717,
+    "multipolygon": 981723,
+    "valid_geometry": 20261010
+  },
+  "triangulator": {
+    "license_sha256": "7abfee8cea84a4f2f379e2b2151f8a4709b00ba99d86e94affbc0a99ce5590fb",
+    "path": "earcut/earcut.py",
+    "repository": "https://github.com/joshuaskelly/earcut-python",
+    "revision": "c0d27600d5423d06686eeeb5e24c5f43595c7c1d",
+    "upstream_sha256": "47e2350ed7ff52c106e40026a823c71479d63028ca8e17ab104a9ec1bca4082d",
+    "vendored_sha256": "cf1a9cf27ab60bc5f18a23ad60887ea1e30c9dea2dc00d60c9c05b027174f177"
+  },
+  "workloads": {
+    "bounded": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 1793421,
+          "sha256": "bce6409108a73ec58d214c1b03e4161b51a7dd0a0d78cb099ebb7edbc8ef4dba"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 471210,
+          "sha256": "3693c13faf147516597d3d55e88cd3c011ff2b6824a5c8475e18f94beb42cd2b"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 946512,
+          "sha256": "234be2d619a1a68909fcdcbba76994fa21a3370761f02758bfd7c7a4fe68f284"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.82,
+      "independent_readback": {
+        "historical_glb_byte_identical": true,
+        "max_bounds_float32_error_m": 1.1368683772161603e-13,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 1000
+      },
+      "input_bytes": 449805,
+      "input_sha256": "7f25685fb8e760cfd4ab84004566df7efc23142ef41f02ce07b91686d5247d2f",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {},
+      "peak_process_rss_kib": 38832,
+      "totals": {
+        "features": 1000,
+        "triangles": 12000,
+        "vertices": 8000
+      },
+      "wall_seconds": 0.8288122578524053
+    },
+    "courtyard": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 7379,
+          "sha256": "cfa2f57723970f3fef2d038f46be6ec6e16686e821e757abb8b43161da85ae0f"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 4104,
+          "sha256": "9f9dc5a10761981c051ad224305c9324cd480063080ab56e8423deedda2ed037"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 1844,
+          "sha256": "5902ca7c3a239291fee06c369a64746a686eac770f71e5ad8f7ddc9cc40f5ee1"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.24,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 7.105427357601002e-15,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 1
+      },
+      "input_bytes": 1996,
+      "input_sha256": "bad27577c4ed69bd1e0f1f742b0e0d5667cba9f9d5337143dd40b41b1b169d5e",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "consumed_relation_member": 8,
+        "unsupported_relation": 1
+      },
+      "peak_process_rss_kib": 21396,
+      "totals": {
+        "features": 1,
+        "triangles": 32,
+        "vertices": 16
+      },
+      "wall_seconds": 0.24360571382567286
+    },
+    "empty": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 1540,
+          "sha256": "39d5a8143f51da029daeda75b6593257a8be7d528d689e4c3cb59767c1f853a2"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 1197,
+          "sha256": "fb7e53749f68e6434dc95e75378f965ec72eaf01cea2cf36f3a300bbc5044dc7"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 112,
+          "sha256": "70bd78100310104875b2791326a0101f0c4c6b6363c5576479e1710f18a1956d"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.29,
+      "independent_readback": {
+        "historical_glb_byte_identical": true,
+        "max_bounds_float32_error_m": 0.0,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 0
+      },
+      "input_bytes": 20,
+      "input_sha256": "00248d758596638fa8fd370c577e4856bf1368db33a1396c61be0eb80dd5c310",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {},
+      "peak_process_rss_kib": 21244,
+      "totals": {
+        "features": 0,
+        "triangles": 0,
+        "vertices": 0
+      },
+      "wall_seconds": 0.2985342117026448
+    },
+    "real": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 24374,
+          "sha256": "7e7804a306ced75fdbb91a8673266342a198319782de7d396af2c707a55f38bd"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 6359,
+          "sha256": "31bfbb2b26fe4a67bcde8942e8334b4a99b5aacc2c30239a3beaa0c62f0926e2"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 12912,
+          "sha256": "de432810965184559f565b9845203f4865917f2cdf0704ebb57408c4071d060a"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.25,
+      "independent_readback": {
+        "historical_glb_byte_identical": true,
+        "max_bounds_float32_error_m": 6.210182164068101e-06,
+        "max_dimension_float32_error_m": 8.790915359657703e-06,
+        "meshes": 6
+      },
+      "input_bytes": 15365,
+      "input_sha256": "480ddb9155d0fb644a37748cb9df79be065f49796ba89f2b9081b037f955e988",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "standalone_node_not_rendered": 4
+      },
+      "peak_process_rss_kib": 21572,
+      "totals": {
+        "features": 6,
+        "triangles": 310,
+        "vertices": 194
+      },
+      "wall_seconds": 0.26168717397376895
+    },
+    "relations-bounded": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 548791,
+          "sha256": "70959c2de87e8a5a59eaa785e6cc9b934ae2a5cf21fe750530357bf77c000cef"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 296372,
+          "sha256": "945202c5069f3405a24af0e2f8857a7b6f135e227537aeed3beeec62b7b35a24"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 144764,
+          "sha256": "9ed9db92417514a3a68b7327b860701bded5ad91a234f7383e8511685378a665"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.49,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 1.104197463064338e-05,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 100
+      },
+      "input_bytes": 206914,
+      "input_sha256": "d6b99be5f553c2263314b63b7319430875599a14041ca1edb8750a2faf70f220",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "consumed_relation_member": 800
+      },
+      "peak_process_rss_kib": 26868,
+      "totals": {
+        "features": 100,
+        "triangles": 3200,
+        "vertices": 1600
+      },
+      "wall_seconds": 0.49449764005839825
+    },
+    "synthetic": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 12121,
+          "sha256": "b367be7804d2e89aac4d7b8cde59b3ccd28f3224e1b83394c2fcb034b9755f03"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 4531,
+          "sha256": "ec10fbb640ccacaf3e76510d2a947c4498400174e3d01f657b4f145521dc6fd1"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 5228,
+          "sha256": "1ec9739c4d9002b0df18bc783f9672b9307a5dfc9ef63acf8d615e0b36c372b4"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.23,
+      "independent_readback": {
+        "historical_glb_byte_identical": true,
+        "max_bounds_float32_error_m": 3.0252396925334324e-06,
+        "max_dimension_float32_error_m": 1.5258789062277955e-06,
+        "meshes": 5
+      },
+      "input_bytes": 4052,
+      "input_sha256": "ba7f200c4012c40b4568522cc86fa0725522970520020fd27b9b27caeae35391",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "elevation_dependent_feature": 1,
+        "empty_relation": 1,
+        "missing_node_reference": 1,
+        "outside_extent": 1,
+        "self_intersection": 1,
+        "unclosed_building": 1
+      },
+      "peak_process_rss_kib": 21376,
+      "totals": {
+        "features": 5,
+        "triangles": 50,
+        "vertices": 40
+      },
+      "wall_seconds": 0.2388553498312831
+    },
+    "upstream-mp_two_holes": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 6882,
+          "sha256": "c12fdacd3b3533441a649f0f28984461fda71d328143a028e40e54b69c713bf2"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 3113,
+          "sha256": "5c167209e9f53a7dd95067f887e98e3b52164eb8373b21a6e6011247641d53b1"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 2428,
+          "sha256": "1bc439559c98afe71788e9d338c3ffe055a01badcc477e20267f4be2e8694b0c"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.22,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 3.013689298114741e-07,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 1
+      },
+      "input_bytes": 2343,
+      "input_sha256": "ed9c621962335326c6cee2b50de173da9707dfb7cd7f9814409a37919398c2a0",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "consumed_relation_member": 3
+      },
+      "peak_process_rss_kib": 21176,
+      "totals": {
+        "features": 1,
+        "triangles": 56,
+        "vertices": 26
+      },
+      "wall_seconds": 0.22538345074281096
+    },
+    "upstream-mp_two_holes_advanced": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 7346,
+          "sha256": "facd4238b33f06fc8bdf6eb46535441f5a8fe120387e2228d7a0e56488063fcc"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 3497,
+          "sha256": "9454fc39a3a0015e1bb80434aa126057b287c9e99f4d498b4da03b0378c64ba0"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 2428,
+          "sha256": "93ffdffd8de6300b582f14f04f0dac376d236b1d2e6ce6c8db322e0a1359b8d2"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.39,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 3.013689298114741e-07,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 1
+      },
+      "input_bytes": 3191,
+      "input_sha256": "2fb9cb304350cb417b4d281064b82317c07c44a08c8332c57eefaa8664d0c23c",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "consumed_relation_member": 5
+      },
+      "peak_process_rss_kib": 21240,
+      "totals": {
+        "features": 1,
+        "triangles": 56,
+        "vertices": 26
+      },
+      "wall_seconds": 0.3970297588966787
+    },
+    "upstream-mp_two_holes_outer_tagged": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 2229,
+          "sha256": "974db35bd948a24d8abc58000da54dda68cb655d41fc54a47d5372e904b75970"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 1794,
+          "sha256": "191235a01c92a91cdd5145abeffc4cbe7096e27bc45bc44baa0439f7b65b50b0"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 112,
+          "sha256": "70bd78100310104875b2791326a0101f0c4c6b6363c5576479e1710f18a1956d"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.28,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 0.0,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 0
+      },
+      "input_bytes": 2359,
+      "input_sha256": "3e1374864c7dd995f763e67f2c3a39a5fdde995808036cc0c55d460b140f305e",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "unsupported_relation": 1,
+        "unsupported_relation_member": 3
+      },
+      "peak_process_rss_kib": 21208,
+      "totals": {
+        "features": 0,
+        "triangles": 0,
+        "vertices": 0
+      },
+      "wall_seconds": 0.2911056699231267
+    },
+    "upstream-mp_two_holes_touching_inners": {
+      "artifacts": {
+        "data.js": {
+          "bytes": 2448,
+          "sha256": "4fd2391179684a0e3365e5ef6fdb69fafc6d9bfd5d59fd9fcdd56e574c746f7b"
+        },
+        "index.html": {
+          "bytes": 3303,
+          "sha256": "23666d46b99efe28fc02d4cf1080c3e9c49ca1da0793520e14ce91a72caa0e6e"
+        },
+        "manifest.json": {
+          "bytes": 1977,
+          "sha256": "f22ca9db9d4691a1398c66ec60b2e8ade87b2ed04c13fa932e3c17c4758cfaec"
+        },
+        "preview.js": {
+          "bytes": 9218,
+          "sha256": "0c69b7b68acbe3016890e4b15cb641435817b052a8370745c49cd425b899b31b"
+        },
+        "scene.glb": {
+          "bytes": 112,
+          "sha256": "70bd78100310104875b2791326a0101f0c4c6b6363c5576479e1710f18a1956d"
+        },
+        "style.css": {
+          "bytes": 2792,
+          "sha256": "f89866ac6012ce9430aba78c9258fef50408eed88ed119532b01558fdd25f6aa"
+        }
+      },
+      "byte_identical_repeated_exports": true,
+      "gnu_time_elapsed_seconds": 0.27,
+      "independent_readback": {
+        "max_bounds_float32_error_m": 0.0,
+        "max_dimension_float32_error_m": 0.0,
+        "meshes": 0
+      },
+      "input_bytes": 2470,
+      "input_sha256": "58bf2c969fe05325338429ef9074638f676748fa3b0c3182ee70def01fe7ff86",
+      "input_unchanged": true,
+      "installed_collision_exit_code": 2,
+      "network_audit": {
+        "guard_probe_blocked": true,
+        "socket_attempts": []
+      },
+      "omission_counts": {
+        "touching_or_intersecting_rings": 1,
+        "unsupported_relation_member": 4
+      },
+      "peak_process_rss_kib": 21236,
+      "totals": {
+        "features": 0,
+        "triangles": 0,
+        "vertices": 0
+      },
+      "wall_seconds": 0.2778775291517377
+    }
+  }
+}

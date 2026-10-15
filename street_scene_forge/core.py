@@ -13,6 +13,7 @@ from xml.parsers import expat
 from . import __version__
 from .geometry import GeometryError, check_float32, extrusion, ribbon
 from .glb import encode, json_bytes
+from .relations import assemble, extrude
 
 RADIUS = 6371008.8
 ROAD_WIDTHS = {'motorway': 12., 'trunk': 10., 'primary': 8., 'secondary': 7.,
@@ -32,6 +33,7 @@ class Limits:
     ways: int = 5000
     relations: int = 5000
     refs_per_way: int = 256
+    relation_refs: int = 512
     vertices: int = 100000
     triangles: int = 100000
     extent_m: float = 5000.
@@ -115,7 +117,7 @@ def read_osm(raw, budget):
             elif name == 'member' and stack[-1] == 'relation':
                 if len(current['members']) >= 1000:
                     raise ForgeError('relation_member_limit')
-                current['members'].append((attrs.get('type'), identifier(attrs.get('ref'))))
+                current['members'].append((attrs.get('type'), identifier(attrs.get('ref')), attrs.get('role', '')))
             else:
                 raise ForgeError('unexpected_xml_child')
         stack.append(name)
@@ -174,23 +176,38 @@ def build(raw, bbox, limits=Limits(), budget=None):
     project, projection = extent(bbox, limits)
     nodes, ways, relations, diagnostics, counts = read_osm(raw, budget)
     blocked_members = set()
+    owners = {}
+    candidates = []
+    nested = {ref for relation in relations.values() for typ, ref, role in relation['members'] if typ == 'relation'}
     for ident, relation in sorted(relations.items(), key=lambda x: int(x[0])):
-        diagnostics.append({'id': 'relation/'+ident, 'reason': 'unsupported_relation'})
         if relation['tags'].get('type') in ('multipolygon', 'building') or 'building' in relation['tags']:
-            blocked_members.update(ref for typ, ref in relation['members'] if typ == 'way')
+            for typ, ref, role in relation['members']:
+                if typ == 'way':
+                    blocked_members.add(ref)
+                    owners.setdefault(ref, set()).add(ident)
+        if relation['tags'].get('type') == 'multipolygon' and relation['tags'].get('building') not in (None, 'no'):
+            candidates.append((ident, relation))
+        else:
+            diagnostics.append({'id': 'relation/'+ident, 'reason': 'unsupported_relation'})
+    consumed = set()
     meshes, features = [], []
     nv = nt = 0
     west, south, east, north = bbox
     lower = project(west, north)
     upper = project(east, south)
-    for ident, way in sorted(ways.items(), key=lambda x: int(x[0])):
+    entries = [('relation', ident, r) for ident, r in candidates] + [('way', ident, w) for ident, w in sorted(ways.items(), key=lambda x: int(x[0]))]
+    for source_type, ident, way in entries:
         budget.check()
-        osm_id = 'way/'+ident
+        osm_id = source_type+'/'+ident
+        rings = None
         tags = way['tags']
         def reject(reason):
             diagnostics.append({'id': osm_id, 'reason': reason})
         if not way['visible']:
             reject('deleted_feature')
+            continue
+        if source_type == 'way' and ident in blocked_members:
+            reject('consumed_relation_member' if ident in consumed else 'unsupported_relation_member')
             continue
         kind = 'building' if tags.get('building') not in (None, 'no') else 'road' if 'highway' in tags else None
         if 'building:part' in tags:
@@ -198,9 +215,6 @@ def build(raw, bbox, limits=Limits(), budget=None):
             continue
         if not kind:
             reject('unsupported_feature')
-            continue
-        if ident in blocked_members:
-            reject('unsupported_relation_member')
             continue
         if any(tags.get(k, default) != default for k, default in
                (('bridge', 'no'), ('tunnel', 'no'), ('layer', '0'), ('min_height', '0'),
@@ -217,8 +231,14 @@ def build(raw, bbox, limits=Limits(), budget=None):
         points = [project(*coord) for coord in coords]
         assumptions = []
         try:
+            if source_type == 'relation':
+                if ident in nested:
+                    raise GeometryError('nested_relation_unsupported')
+                if any(len(owners.get(ref, ())) > 1 for typ, ref, role in way['members'] if typ == 'way'):
+                    raise GeometryError('shared_relation_member')
+                rings = assemble(way, ways, nodes, project, bbox, budget)
             if kind == 'building':
-                if len(way['refs']) < 4 or way['refs'][0] != way['refs'][-1]:
+                if rings is None and (len(way['refs']) < 4 or way['refs'][0] != way['refs'][-1]):
                     raise GeometryError('unclosed_building')
                 if 'height' in tags:
                     value, source = dimension(tags['height'], 600), 'height'
@@ -229,7 +249,7 @@ def build(raw, bbox, limits=Limits(), budget=None):
                 if source != 'height':
                     assumptions.append('height inferred; roof included in flat extrusion')
                 assumptions.append('flat roof and ground; no facade detail')
-                vertices, triangles, measure = extrusion(points, value)
+                vertices, triangles, measure = extrude(rings, value, budget) if rings is not None else extrusion(points, value)
                 dims = {'height_m': value, 'height_source': source, 'height_inferred': source != 'height',
                         'footprint_area_m2': measure, 'volume_m3': measure*value}
             else:
@@ -254,14 +274,23 @@ def build(raw, bbox, limits=Limits(), budget=None):
         features.append({'id': osm_id, 'mesh': len(meshes), 'kind': kind, 'tags': tags,
                          'source_node_ids': way['refs'], 'dimensions': dims, 'bounds_m': bounds,
                          'vertex_count': len(vertices), 'triangle_count': len(triangles), 'assumptions': assumptions})
+        if rings is not None:
+            consumed.update(ref for typ, ref, role in way['members'])
+            features[-1]['source_node_ids'] = sorted({ref for ring in rings for ref in ring['source_node_ids']}, key=int)
+            features[-1]['source_members'] = [dict(type=typ, ref=ref, role=role, tags=ways[ref]['tags'], source_node_ids=ways[ref]['refs']) for typ, ref, role in sorted(way['members'], key=lambda m: int(m[1]))]
+            features[-1]['rings'] = [{k: v for k, v in ring.items() if k != 'points'} for ring in rings]
+            features[-1]['assumptions'].append('relation tags authoritative; member tags retained but not inherited; courtyard open through roof and bottom')
         meshes.append({'id': osm_id, 'kind': kind, 'vertices': vertices, 'triangles': triangles})
     budget.check()
-    manifest = {'schema_version': 1, 'generator': 'street-scene-forge '+__version__,
+    manifest = {'schema_version': 2, 'generator': 'street-scene-forge '+__version__,
                 'input': {'sha256': hashlib.sha256(raw).hexdigest(), 'bytes': len(raw), 'element_counts': counts},
                 'bbox': list(bbox), 'projection': projection, 'limits': asdict(limits),
                 'attribution': 'Map data © OpenStreetMap contributors, ODbL 1.0 when sourced from OSM. Synthetic fixtures are labeled separately.',
                 'limitations': ['Approximate dimensions, not surveying accuracy.', 'Flat terrain; incomplete map structures.',
                                 'Whole-feature boundary omission; no clipping.', 'No game-engine, physical-world, or human-usability validation.'],
+                'source_relations': [{'id': 'relation/'+ident, 'tags': relation['tags'], 'visible': relation['visible'],
+                    'members': [dict(type=typ, ref=ref, role=role) for typ, ref, role in relation['members']]}
+                    for ident, relation in sorted(relations.items(), key=lambda x: int(x[0]))],
                 'features': features, 'diagnostics': diagnostics,
                 'omission_counts': dict(sorted(Counter(d['reason'] for d in diagnostics).items())),
                 'totals': {'features': len(features), 'vertices': nv, 'triangles': nt}}

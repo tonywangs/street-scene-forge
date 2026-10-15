@@ -1,0 +1,11 @@
+{
+  "case": 3,
+  "exported_features": 1,
+  "input_sha256": "047d83edc2174b57a8c1ae1c552630c6b4c5f0951f586e5d490f0367f39f09ee",
+  "interpretation": "Earcut output alone is insufficient for a closed solid; remove zero-area bridge faces and repair T-junctions, then enforce area and directed-edge topology.",
+  "raw_degenerate_triangles": 1,
+  "raw_triangles": 16,
+  "repaired_degenerate_triangles": 0,
+  "repaired_triangles": 16,
+  "seed": 981726
+}

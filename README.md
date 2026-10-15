@@ -2,12 +2,12 @@
 
 Turn a **local, bounded OpenStreetMap XML extract** into a dimensioned GLB, a
 provenance manifest, and an interactive preview that opens directly from disk.
-Python standard library only. No tiles, textures, API calls, or browser CDN.
+Python standard library plus a bundled ISC-licensed triangulator; no runtime installation. No tiles, textures, API calls, or browser CDN.
 
 ![Synthetic scene, source inspector, and feature table](results/synthetic-browser.png)
 
-This is a deliberately small map interpreter: simple buildings become closed
-flat-roof extrusions, and selected roads become flat segment ribbons. Every
+This is a deliberately small map interpreter: building ways and bounded multipolygon relations become closed
+flat-roof extrusions with open courtyards, and selected roads become flat segment ribbons. Every
 inferred height/width is labeled. Unsupported or out-of-bounds features appear
 in the manifest's diagnostics. It is **not a survey or complete city model**.
 
@@ -39,12 +39,27 @@ Their data is © OpenStreetMap contributors, ODbL 1.0; see
 [fixture provenance and redistribution](fixtures/README.md).
 The verification command uses the exact bbox in the provenance JSON.
 
+## Courtyard example
+
+```sh
+python3 -m street_scene_forge fixtures/courtyard.osm \
+  --bbox -0.001 -0.001 0.001 0.001 --output /tmp/courtyard-scene
+```
+
+Open the preview, select `relation/900`, and raise Elevation to 85° to look into
+the courtyard. The inspector shows relation tags, member IDs/tags, assembled
+rings, and height assumptions. The courtyard is open through both caps; walls
+face the empty space. Consumed ways appear in diagnostics and are not duplicate
+buildings. This example is synthetic and includes an inert hostile name.
+
+![Selected courtyard relation with visible opening](results/multipolygons/courtyard-browser.png)
+
 ## Inspect the output
 
 | File | Purpose |
 | --- | --- |
-| `scene.glb` | glTF 2.0 binary: one indexed mesh/node per supported way, in metres |
-| `manifest.json` | Schema version 1; input SHA-256, projection, limits, IDs, tags, dimensions, assumptions, bounds, omissions, GLB hash |
+| `scene.glb` | glTF 2.0 binary: one indexed mesh/node per supported way or relation, in metres |
+| `manifest.json` | Schema version 2; input SHA-256, projection, limits, IDs, tags, dimensions, assumptions, bounds, omissions, GLB hash |
 | `index.html` | Offline interactive inspector and keyboard-accessible feature table |
 | `preview.js`, `style.css`, `data.js` | Bundled viewer and data; no external assets |
 
@@ -64,7 +79,9 @@ See [the full contract](docs/CONTRACT.md), including all limits and diagnostics.
 
 - UTF-8 OSM 0.6 XML, local regular file, at most 8 MiB; no DTDs or entities.
 - Explicit extent at most 5 km per side, between 85°S and 85°N, no date-line crossing.
-- Simple, closed building ways; no holes, building parts, or multipolygons.
+- Simple closed building ways and building multipolygons with fragmented rings,
+  disconnected outers and strictly contained courtyard holes. No building parts,
+  touching rings, nesting or legacy outer-tag inheritance.
 - Height: metric `height`, otherwise `building:levels × 3 m`, otherwise 9 m.
   Levels/default values are inferences, not measurements. Unsupported units or
   invalid explicit dimensions omit the feature rather than silently defaulting.
@@ -84,10 +101,12 @@ been established.
 ## Verify
 
 Conversion and preview need no third-party packages. The **development checks**
-use pinned `gltf-validator@2.0.0-dev.3.10` and `playwright@1.64.0`. Install these
+use pinned `gltf-validator@2.0.0-dev.3.10`, `playwright@1.64.0`, and
+Shapely/GEOS as an independent geometry oracle. Install these
 once, with network access, before the offline verification:
 
 ```sh
+python3 -m pip install -r requirements-verification.txt
 npm ci --ignore-scripts --cache /tmp/street-forge-npm
 PLAYWRIGHT_BROWSERS_PATH=/tmp/street-forge-browsers \
   node node_modules/playwright/cli.js install chromium
@@ -106,9 +125,11 @@ This reruns unit and seeded geometric checks, installs the CLI in a temporary
 prefix, executes it from an isolated working directory with a tested socket-denying
 Python audit hook, validates GLBs with Khronos, independently decodes geometry,
 compares repeated outputs, and exercises Chromium with networking disabled.
-It checks synthetic, real, empty, and generated 1,000-building inputs, recording
+It checks the original four workloads, a courtyard example, 100 generated
+courtyard buildings, and four pinned upstream fixtures, recording
 runtime, per-process peak RSS, asset sizes/hashes, warnings, and browser results
-in [`results/`](results/README.md). To keep the recorded evidence unchanged, pass
+in [`results/multipolygons/`](results/multipolygons/README.md), preserving the
+original evidence in `results/`. To keep the recorded evidence unchanged, pass
 `--results /tmp/forge-verification`.
 
 The browser test needs its downloaded browser cache. `PLAYWRIGHT_BROWSERS_PATH`
@@ -116,7 +137,14 @@ can override its location; the documented `/tmp/street-forge-browsers` is detect
 automatically when present. `FORGE_CHROMIUM` can point at another executable,
 but that makes the recorded browser version different from the pinned setup.
 
-Quick geometry/contract tests without Node or Chromium:
+For a directory-based validation installation (used in the recorded Linux run):
+
+```sh
+python3 -m pip install --target /tmp/forge-validation-deps -r requirements-verification.txt
+PYTHONPATH=/tmp/forge-validation-deps python3 scripts/verify.py
+```
+
+Quick geometry/contract tests with Shapely, without Node or Chromium:
 
 ```sh
 python3 -m unittest discover -v
@@ -125,12 +153,15 @@ python3 -m unittest discover -v
 ## Limits and known omissions
 
 Flat terrain, approximate map dimensions, no textured roofs/facades, lanes,
-curbs, signs, trees, courtyards, multipolygons, or terrain fitting. Buildings can
+curbs, signs, trees, complex building relations, or terrain fitting. Buildings can
 overlap; roads can overlap or leave gaps at bends. Tags not used by the input
 contract remain visible as source text but do not change geometry. Heights do
 not establish real-world accuracy, even when explicitly tagged.
 
-The independent checks cover 240 seeded concave building/road cases and 80 seeded
+The independent checks add 250 seeded multipolygon GEOS comparisons, 32 exact
+relation boundary cases, 64 seeded invalid relations, four licensed upstream
+regressions and relation
+resource/lifecycle tests. They retain 240 seeded concave building/road cases and 80 seeded
 invalid/missing-reference cases and 64 seeded boundary groups, plus contract, resource, precision,
 cancellation, and output-lifecycle checks. This is not an exhaustive proof for
 all OSM data. **No game-engine import, physical-world comparison, human usability
@@ -146,5 +177,6 @@ up. Runtime enforcement with a hard alarm is supported on Unix CLI invocations.
 comparison with it. [Source review notes](docs/SOURCES.md) explain the conservative
 scope and link the OSM and glTF conventions used here.
 
-Code: [MIT](LICENSE). Synthetic fixtures: CC0-1.0. Real OSM fixture: ODbL-1.0,
+Code: [MIT](LICENSE); bundled Earcut: ISC. Synthetic fixtures: CC0-1.0.
+Upstream OSM2World regression fixtures: MIT. Real OSM fixture: ODbL-1.0,
 © OpenStreetMap contributors; code licensing does not relicense map data.

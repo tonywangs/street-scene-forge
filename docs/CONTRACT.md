@@ -1,4 +1,4 @@
-# Version 1 input/output contract
+# Version 2 input/output contract
 
 ## Input grammar and omissions
 
@@ -17,12 +17,47 @@ namespaces, and other elements reject the input. XML comments and text do not
 instruct the converter. No imported URL is dereferenced. Explicit CLI bounds,
 not input `<bounds>`, control inclusion.
 
-Every way either produces exactly one feature and one GLB mesh or one omission.
-Every relation is reported as unsupported. Multipolygon/building-relation member
-ways are also excluded, so a known courtyard outer ring cannot become a filled
-building accidentally. Other relation types (for example routes) do not suppress
-otherwise supported ways. Tagged nodes are counted as
-`standalone_node_not_rendered`; ordinary footprint nodes are not omissions.
+Every way either produces one feature/mesh or one diagnostic. Supported building
+multipolygon relations produce one feature/mesh, even with disconnected outer
+rings. Successful relation members are diagnosed as `consumed_relation_member`,
+not independently rendered. Members of rejected multipolygon/building relations
+remain suppressed (`unsupported_relation_member`) to avoid filling courtyards.
+Other relation types (such as routes) do not suppress their ways. Tagged nodes
+are counted as `standalone_node_not_rendered`; ordinary footprint nodes are not.
+
+### Building relation contract
+
+Only visible `type=multipolygon` relations with an explicit enabled `building`
+tag qualify. Relation tags alone control dimensions and exclusions. Member tags
+are preserved for inspection but never inherited; conflicting heights do not
+change the relation. Legacy outer-tag-only polygons are unsupported. `type=building`,
+`building:part`, nested relations, and elevation-dependent relations are omitted.
+
+All members must be ways with explicit `outer` or `inner` roles. Empty/unknown
+roles, node/relation members, repeated member IDs, missing/invisible ways/nodes,
+and empty relations are rejected. A way claimed by more than one relevant
+relation causes all candidate owners to be rejected. Any relation referenced as
+a relation member is itself omitted, even if otherwise valid. These conservative
+rules intentionally omit some legal OSM structures.
+
+Fragments join only at equal node IDs, never by coordinate proximity. Each role's
+open-fragment endpoint graph must have degree two everywhere. Closed ways are
+individual rings. Assembly starts at the numerically smallest remaining way ID;
+geometry is then canonicalized by coordinates, winding and ring order. Reversed
+ways and reordered members retain byte-identical GLB geometry, although their
+source provenance and input fingerprint necessarily differ.
+
+Rings must be simple and pairwise boundary-disjoint. Crossing, tangency, shared
+vertices, shared edges, nested outer rings and nested inner rings are rejected.
+Each hole must lie strictly inside exactly one outer. Multiple disconnected
+outers and multiple separate courtyards are supported. Islands inside holes and
+all touching-hole OSM special cases are unsupported. Every source coordinate
+must fit the inclusive bbox; crossing geometry is omitted whole, never clipped.
+
+Relation geometry is capped at 512 member node references (including fragment
+endpoints/closures) and 32 rings. Exceeding either omits the relation with
+`relation_geometry_limit`; global parse/output/mesh/time limits still abort the
+conversion. This cap bounds quadratic validation and triangulation work.
 
 Omission diagnostics contain source ID and a stable reason, not a traceback.
 Only the first applicable reason is emitted for each way. The aggregate counts
@@ -34,7 +69,15 @@ Common reasons:
 | Reason | Meaning |
 | --- | --- |
 | `unsupported_feature`, `unsupported_highway` | No supported building/road interpretation, excluded road class, or road area |
-| `unsupported_relation`, `unsupported_relation_member` | Relation topology not implemented |
+| `unsupported_relation`, `unsupported_relation_member` | Unsupported relation or suppressed member of a rejected relation |
+| `consumed_relation_member` | Member already represented by a successful relation (not a missing building) |
+| `empty_relation`, `missing_outer_ring`, `missing_way_reference` | Missing required relation structure |
+| `unsupported_member_role`, `unsupported_relation_member_type` | Explicit way/outer/inner contract violated |
+| `duplicate_relation_member`, `shared_relation_member`, `nested_relation_unsupported` | Ambiguous or unsupported membership |
+| `ambiguous_or_unclosed_ring`, `unclosed_relation_ring` | Fragments cannot form unambiguous closed rings |
+| `touching_or_intersecting_rings`, `nested_rings_unsupported`, `inner_not_contained` | Unsupported ring topology |
+| `relation_geometry_limit` | More than 512 member references or 32 rings |
+| `triangulation_area_mismatch`, `triangulation_topology_mismatch` | Cap failed post-triangulation validation |
 | `unsupported_building_part` | `building:part` tag present |
 | `deleted_feature` | `visible=false` |
 | `elevation_dependent_feature` | Bridge/tunnel, nonzero layer/base, `ele`/`incline`, or non-surface location |
@@ -117,6 +160,16 @@ interval tolerance is 1e-8 m). These are implementation tolerances, not accuracy
 claims. Ear clipping triangulates the simple polygon. Winding is canonicalized
 in the XZ plane, starting at its lexicographically lowest point.
 
+Relation caps use the vendored Earcut Python port. Zero-area bridge triangles
+are removed, and edges are split at existing collinear vertices to repair
+T-junctions without moving vertices. The result must have positive triangles,
+matching footprint area, and exactly the directed ring boundary plus oppositely
+paired interior edges. Failed caps are omitted explicitly. These checks prevent
+accepting a merely renderable but nonconforming cap. The same cap is used for
+roof and bottom: courtyard interiors are absent from both. Inner walls face
+into the courtyard; outer walls face out of the solid. Disconnected outers share
+one relation mesh but remain disconnected closed components.
+
 Bottom caps face −Y, top caps face +Y, and walls face outward. Closed extrusions
 include the bottom. A road segment generates four vertices and two upward-facing
 triangles. Each segment has a separate pair of butt ends; bent/self-crossing
@@ -133,7 +186,7 @@ and independently measured by verification.
 
 ## Output and reproducibility
 
-Manifest schema version is `1`; incompatible interpretation changes require a
+Manifest schema version is `2`; incompatible interpretation changes require a
 version change. `features[]` gives `id`, `kind`, integer `mesh`, original source
 `tags`, ordered `source_node_ids`, `dimensions` with explicit source/inferred
 flags, bounds in metres, vertex/triangle counts, and assumptions. `input` records
@@ -142,9 +195,20 @@ SHA-256 of **exact input bytes**, byte length, and element counts. `bbox`,
 records the GLB SHA-256 and byte length. `diagnostics`, `omission_counts`, and
 `totals` cover omissions and exported geometry.
 
-Ways and relations are ordered by normalized numeric ID. JSON keys are sorted;
+Relation features precede way features, each sorted by normalized numeric ID.
+Successful relation features add `source_members` (type, ref, role, original tags
+and node references) and `rings` (role, member way IDs, assembled node IDs, and
+`outer_index` for holes). Their `source_node_ids` is a sorted unique union.
+`source_relations` retains tags, visibility and original ordered member lists for
+all relations, including rejected ones. Diagnostics identify the omitted source;
+the exact input SHA-256 binds all these identifiers to the same source bytes.
+Schema 1 historical results remain in `results/`; new evidence is separate.
+ JSON keys are sorted;
 no current time, absolute path, random ID, or environment-specific metadata is
-embedded. GLB arrays and chunk padding are deterministic. Vertex positions and
+embedded. GLB arrays and chunk padding are deterministic. The unchanged GLB encoder retains
+its historical `asset.generator` identifier `street-scene-forge 0.1.0` so legacy
+GLB bytes stay identical. The manifest generator records converter version 0.2.0
+and is the authoritative application version. Vertex positions and
 normals are little-endian float32; indices are unsigned 32-bit. There is one node
 per mesh and one primitive per mesh. All buffer data is embedded. Empty inputs
 export a valid empty scene and a usable empty inspector.
@@ -163,6 +227,7 @@ This is a local inspector, not a server or deployed website.
 | Ways / relations | 5,000 each |
 | Node references per way (including closure) | 256 |
 | Members per relation | 1,000 |
+| Geometry references / rings per building relation | 512 / 32 |
 | Tags per element | 128 |
 | Attributes per XML element | 32 |
 | Attribute key / value length | 128 / 2,048 characters |

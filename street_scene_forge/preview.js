@@ -33,7 +33,7 @@
     selected = (index + manifest.features.length) % manifest.features.length;
     const f = manifest.features[selected];
     $('selection').textContent = `${f.id} · ${f.kind}${f.tags.name ? ' · ' + f.tags.name : ''}`;
-    $('details').textContent = JSON.stringify({id: f.id, dimensions: f.dimensions, assumptions: f.assumptions, source_tags: f.tags, source_node_ids: f.source_node_ids, bounds_m: f.bounds_m}, null, 2);
+    $('details').textContent = JSON.stringify({id: f.id, dimensions: f.dimensions, assumptions: f.assumptions, source_tags: f.tags, source_node_ids: f.source_node_ids, source_members: f.source_members, rings: f.rings, bounds_m: f.bounds_m}, null, 2);
     rows.forEach((r, i) => r.button.setAttribute('aria-pressed', String(i === selected)));
     draw();
   }
@@ -50,8 +50,8 @@
   $('filter').addEventListener('input', () => rows.forEach(r => {r.tr.hidden = !r.text.includes($('filter').value.toLowerCase());}));
   $('summary').textContent = `${meshes.length} features / ${manifest.totals.triangles.toLocaleString()} triangles`;
   $('attribution').textContent = manifest.attribution;
-  $('provenance').textContent = JSON.stringify({input: manifest.input, projection: manifest.projection, bbox: manifest.bbox, limits: manifest.limits, assets: manifest.assets}, null, 2);
-  $('omission-summary').textContent = `${manifest.diagnostics.length} omitted source features`;
+  $('provenance').textContent = JSON.stringify({input: manifest.input, projection: manifest.projection, bbox: manifest.bbox, limits: manifest.limits, source_relations: manifest.source_relations, assets: manifest.assets}, null, 2);
+  $('omission-summary').textContent = `${manifest.diagnostics.length} source diagnostics (including consumed members)`;
   $('omissions').textContent = JSON.stringify({counts: manifest.omission_counts, diagnostics: manifest.diagnostics}, null, 2);
   function draw() {
     const width = canvas.clientWidth, height = canvas.clientHeight, ratio = Math.min(devicePixelRatio || 1, 2);

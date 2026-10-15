@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/joshuaskelly/earcut-python",
+  "revision": "c0d27600d5423d06686eeeb5e24c5f43595c7c1d",
+  "path": "earcut/earcut.py",
+  "upstream_sha256": "47e2350ed7ff52c106e40026a823c71479d63028ca8e17ab104a9ec1bca4082d",
+  "vendored_sha256": "cf1a9cf27ab60bc5f18a23ad60887ea1e30c9dea2dc00d60c9c05b027174f177",
+  "license_sha256": "7abfee8cea84a4f2f379e2b2151f8a4709b00ba99d86e94affbc0a99ce5590fb"
+}

@@ -29,3 +29,32 @@ implementation was benchmarked, and no OSM2World code was copied.
   [ODbL 1.0 terms](https://opendatacommons.org/licenses/odbl/1-0/): the real fixture
   retains OSM attribution and its separate data license. Acquisition is an
   explicit online helper; offline conversion never contacts these sources.
+
+## Multipolygon review (2026-10-15)
+
+- [OSM multipolygon specification](https://wiki.openstreetmap.org/wiki/Relation:multipolygon):
+  relation-level tags describe the area; ways with `outer` and `inner` roles form
+  rings and may be fragmented. OSM permits some touching inner configurations;
+  this converter deliberately rejects all boundary contact. Legacy outer-way
+  tag inheritance is also outside its conservative contract.
+- [OSM2World ring assembly](https://github.com/tordanik/OSM2World/blob/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core/src/main/java/org/osm2world/map_data/creation/MultipolygonAreaBuilder.java)
+  handles closed and fragmented ways, multiple areas, and some touching holes.
+  Its simple path can inherit outer tags. We instead require degree-two endpoint
+  graphs, explicit roles and relation building tags, and reject ambiguity.
+- [OSM2World Earcut integration](https://github.com/tordanik/OSM2World/blob/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core/src/main/java/org/osm2world/math/algorithms/Earcut4JTriangulationUtil.java)
+  flattens outer and hole vertices into an indexed triangulation. This informed
+  the input layout; no Java implementation code was copied. Four MIT-licensed
+  upstream test fixtures are now redistributed with their license and hashes.
+- [Mapbox Earcut](https://github.com/mapbox/earcut) explicitly does not guarantee
+  arbitrary-input correctness or conforming meshes. The
+  [Python port](https://github.com/joshuaskelly/earcut-python/tree/c0d27600d5423d06686eeeb5e24c5f43595c7c1d)
+  is vendored with ISC attribution, a documented integer-conversion fix, and
+  exact upstream/local hashes. This avoids a converter runtime dependency.
+- [Shapely 2.1.2](https://shapely.readthedocs.io/en/2.1.2/) supplies GEOS polygon
+  union, difference and containment as a separate verification implementation.
+  It is never imported by conversion or installed zipapps. The tests compare
+  exported float32 triangles with the independently constructed source polygon,
+  rather than merely trusting manifest area.
+
+No claim of novel triangulation, representative OSM coverage, or superiority to
+OSM2World follows from this bounded experiment.

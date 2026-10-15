@@ -1,0 +1,66 @@
+{
+  "repository": "https://github.com/tordanik/OSM2World",
+  "revision": "f6518b35117cf7864e9c6f68c3b303a006e27b8f",
+  "license": "MIT; see LICENSE.OSM2World",
+  "scope": "Handcrafted upstream regression fixtures, not representative map coverage. Exact upstream bytes preserved; runtime adaptation adds building=yes,height=7 on relations, or the highway-tagged outer way for the legacy case. Expected areas computed independently with GEOS polygonize and difference; expected accept/reject and ring counts specified from fixture topology and our contract.",
+  "fixtures": [
+    {
+      "file": "mp_two_holes.osm",
+      "url": "https://raw.githubusercontent.com/tordanik/OSM2World/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core-jvm/src/test/resources/mp_two_holes.osm",
+      "sha256": "b798b489af9e848576994959b35f489780ba08af572b8dc1f8af6764134b50a6",
+      "bbox": [
+        0.4917580487045985,
+        -0.07589287546538634,
+        0.4920143766842175,
+        -0.07573827819085664
+      ],
+      "adaptation": "relation_building",
+      "expected_features": 1,
+      "expected_rings": 3,
+      "expected_area_m2": 212.7113674028766
+    },
+    {
+      "file": "mp_two_holes_advanced.osm",
+      "url": "https://raw.githubusercontent.com/tordanik/OSM2World/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core-jvm/src/test/resources/mp_two_holes_advanced.osm",
+      "sha256": "9477666e0f0641e9ffe1925fdee9f27fb8222348a4c828b420994dd164f9cc2d",
+      "bbox": [
+        0.4917580487045985,
+        -0.07589287546538634,
+        0.4920143766842175,
+        -0.07573827819085664
+      ],
+      "adaptation": "relation_building",
+      "expected_features": 1,
+      "expected_rings": 3,
+      "expected_area_m2": 212.71136740287653
+    },
+    {
+      "file": "mp_two_holes_outer_tagged.osm",
+      "url": "https://raw.githubusercontent.com/tordanik/OSM2World/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core-jvm/src/test/resources/mp_two_holes_outer_tagged.osm",
+      "sha256": "1632143ccebac2c4be8395aa226428c82a4ffdf11cd3e434e944ebf7f51c331b",
+      "bbox": [
+        0.4917580487045985,
+        -0.07589287546538634,
+        0.4920143766842175,
+        -0.07573827819085664
+      ],
+      "adaptation": "legacy_outer_building",
+      "expected_features": 0,
+      "expected_reason": "unsupported_relation"
+    },
+    {
+      "file": "mp_two_holes_touching_inners.osm",
+      "url": "https://raw.githubusercontent.com/tordanik/OSM2World/f6518b35117cf7864e9c6f68c3b303a006e27b8f/core-jvm/src/test/resources/mp_two_holes_touching_inners.osm",
+      "sha256": "becd51aa8ba69e5b02e4dd2bae9ba76a47bab8a55d8a07b66c79c570c6f663bc",
+      "bbox": [
+        0.4917580487045985,
+        -0.07589287546538634,
+        0.4920143766842175,
+        -0.07573827819085664
+      ],
+      "adaptation": "relation_building",
+      "expected_features": 0,
+      "expected_reason": "touching_or_intersecting_rings"
+    }
+  ]
+}
