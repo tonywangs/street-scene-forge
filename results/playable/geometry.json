@@ -1,0 +1,10 @@
+{
+  "source_sha256": "039f72b39b62c92bd5852ab9f71b18d56fe0e2c7dd5cf4415ee4273bc27f62f7",
+  "features": 146,
+  "buildings": 12,
+  "triangles": 1400,
+  "packaged_demo_byte_identical": true,
+  "sampled_player_positions": 880,
+  "minimum_building_clearance_m": 0.45745488139604745,
+  "one_command_loopback_launch": true
+}

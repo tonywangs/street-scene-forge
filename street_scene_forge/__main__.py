@@ -11,6 +11,7 @@ def main(argv=None):
     parser.add_argument('input', help='local UTF-8 OSM 0.6 XML file')
     parser.add_argument('--bbox', required=True, type=float, nargs=4, metavar=('WEST', 'SOUTH', 'EAST', 'NORTH'))
     parser.add_argument('--output', required=True, help='new output directory; parent must exist')
+    parser.add_argument('--provenance', help='optional acquisition JSON; SHA-256 and bbox must match input')
     args = parser.parse_args(argv)
     limits = Limits()
     def cancel(signum, frame):
@@ -24,7 +25,7 @@ def main(argv=None):
             previous[sig] = signal.signal(sig, handler)
         signal.setitimer(signal.ITIMER_REAL, limits.seconds)
     try:
-        manifest = convert(args.input, args.output, args.bbox, limits)
+        manifest = convert(args.input, args.output, args.bbox, limits, args.provenance)
         print(f"Exported {manifest['totals']['features']} features; {len(manifest['diagnostics'])} omissions. Open {args.output}/index.html")
         return 0
     except KeyboardInterrupt:

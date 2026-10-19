@@ -256,3 +256,29 @@ error. Exit codes: 0 success (including an empty scene), 2 input/output/runtime
 error, 130 cancellation. SIGKILL/power failure are not recoverable; inspect and
 remove an abandoned new output directory before retrying. Do not concurrently
 modify another process's output directory.
+
+## Browser walking and acquisition records
+
+Every output includes the optional walk mode: a 0.45 m ground-plane disc at
+5 m/s, with an orthographic follow camera. Only exported building bottom-cap
+triangles and the bbox block movement. Courtyard holes and concave recesses stay
+open. Swept disc/triangle checks prevent tunneling; short steps and axis sliding
+resolve contact. Diagonal input is normalized. A frame advances at most 50 ms,
+so slow frames/tab stalls slow simulation rather than teleporting the player.
+No height-dependent movement, slopes, steps, doors, bridges, tunnels, interiors,
+water collision, or navigation permissions are modeled. Free ground need not be
+a real accessible public route. This is a game scene, not pedestrian routing.
+
+The longest unobstructed road segment supplies the optional demonstration route
+between its 10% and 90% points. Finish triggers within 2 m. Other extracts may
+have no route; a 41×41 bounded spawn search can miss small free pockets and then
+reports no safe spawn. There is no claim that all source areas are traversable.
+The ground marker and route overlay remain visible over painted geometry;
+software triangle ordering is approximate and is not a visibility/occlusion proof.
+
+`--provenance FILE` accepts at most 64 KiB of JSON from a regular file, requires
+an exact input SHA-256 and bbox match plus nonempty acquisition/source/attribution/
+license fields, and embeds that record into the manifest and viewer as inert text.
+It copies the input to `source.osm` and the record to `source.provenance.json` in
+the output. Hash matching binds a record to bytes; it does not authenticate the
+publisher or independently verify the claimed acquisition time or license.

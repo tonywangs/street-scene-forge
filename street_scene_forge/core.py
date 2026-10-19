@@ -3,6 +3,7 @@ import base64
 from collections import Counter
 from dataclasses import asdict, dataclass
 import hashlib
+import json
 import math
 from pathlib import Path
 import re
@@ -309,12 +310,12 @@ def artifacts(glb, manifest):
     # embedding an object literal would give that key special JS semantics.
     literal = json_bytes(json_bytes(payload).decode('utf-8'))
     files['data.js'] = b'"use strict";\nconst FORGE_DATA = JSON.parse(' + literal.replace(b'<', b'\\u003c').replace(b'>', b'\\u003e').replace(b'&', b'\\u0026') + b');\n'
-    for name in ('index.html', 'preview.js', 'style.css'):
+    for name in ('index.html', 'preview.js', 'player.js', 'style.css'):
         files[name] = package.joinpath(name).read_bytes()
     return files
 
 
-def convert(input_path, output_path, bbox, limits=Limits()):
+def convert(input_path, output_path, bbox, limits=Limits(), provenance_path=None):
     budget = Budget(limits)
     source, output = Path(input_path), Path(output_path)
     if output.exists() or output.is_symlink():
@@ -328,7 +329,28 @@ def convert(input_path, output_path, bbox, limits=Limits()):
             raise ForgeError('input_must_be_regular_file')
         raw = handle.read(limits.input_bytes+1)
     glb, manifest = build(raw, bbox, limits, budget)
+    if provenance_path is not None:
+        descriptor = os.open(provenance_path, os.O_RDONLY | os.O_NONBLOCK)
+        with os.fdopen(descriptor, 'rb') as handle:
+            if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode):
+                raise ForgeError('provenance_must_be_regular_file')
+            metadata_raw = handle.read(65537)
+        if len(metadata_raw) > 65536:
+            raise ForgeError('provenance_byte_limit')
+        try:
+            metadata = json.loads(metadata_raw)
+        except (ValueError, UnicodeError) as exc:
+            raise ForgeError('invalid_provenance_json') from exc
+        if not isinstance(metadata, dict) or metadata.get('sha256') != manifest['input']['sha256'] or metadata.get('bbox') != list(bbox):
+            raise ForgeError('provenance_hash_or_bbox_mismatch')
+        if any(not isinstance(metadata.get(k), str) or not metadata[k] for k in ('acquired_utc', 'attribution', 'license', 'url')):
+            raise ForgeError('provenance_missing_source_fields')
+        manifest['source'] = metadata
+        manifest['attribution'] = metadata['attribution'] + ' · ' + metadata['license']
     files = artifacts(glb, manifest)
+    if provenance_path is not None:
+        files['source.provenance.json'] = json_bytes(metadata) + b'\n'
+        files['source.osm'] = raw
     if sum(map(len, files.values())) > limits.output_bytes or any(len(v) > limits.file_bytes for v in files.values()):
         raise ForgeError('output_byte_limit')
     budget.check()

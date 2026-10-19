@@ -1,0 +1,6 @@
+test_bound_source_and_portable_assets (tests.test_provenance.ProvenanceTests.test_bound_source_and_portable_assets) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.183s
+
+OK

@@ -58,3 +58,16 @@ implementation was benchmarked, and no OSM2World code was copied.
 
 No claim of novel triangulation, representative OSM coverage, or superiority to
 OSM2World follows from this bounded experiment.
+
+## Playable workflow (2026-10-19)
+
+Revisited [OSM2World](https://osm2world.org/), the
+[OSM API reference](https://wiki.openstreetmap.org/wiki/API_v0.6), and
+[OSM attribution guidance](https://www.openstreetmap.org/copyright).
+The API reference directs non-editing downloads toward Overpass/extracts, so the
+neighborhood helper uses one bounded recursive Overpass request. Its exact query
+is retained in the acquisition record. OSM2World remains substantially broader;
+no novelty or comparative quality claim is made for this playable converter.
+Collision is a local ground-disc model over GLB bottom caps, not physical-world
+validation of the source map. Synthetic collision edge cases supplement, rather
+than replace, keyboard traversal and building contact on the real extract.

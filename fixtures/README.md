@@ -82,3 +82,24 @@ Touching inners must be rejected; legacy outer tags must not fill the courtyard.
 Expected areas are frozen from independent GEOS polygonization/difference of
 source member linework. Acquisition is not part of verification, and verification
 fails if original bytes differ from the pinned hashes.
+
+## Real Berlin neighborhood (playable demo)
+
+`berlin-neighborhood.osm` is a bounded Overpass snapshot acquired at
+2026-10-19T04:33:46Z. Bbox: west 13.403, south 52.519, east 13.4075,
+north 52.522. The recursive query, response and transformed input hashes,
+retrieval time, license, and transformation are in
+[`berlin-neighborhood.provenance.json`](berlin-neighborhood.provenance.json).
+The 749,978-byte XML retains IDs, geometry, tags, versions, and source timestamps;
+only contributor account/changeset attributes and XML formatting were changed.
+Recursive dependencies may extend beyond the requested bbox. Conversion omits
+whole unsupported/out-of-bounds features instead of clipping them.
+
+Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright),
+[ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/). The code's MIT license
+does not relicense this extract, its generated geometry, or the map depicted in
+screenshots. The portable demo redistributes `source.osm` and its acquisition
+record alongside the generated scene; keep these and the attribution together.
+Regenerate with `python3 scripts/demo.py --export NEW_DIRECTORY`. A fresh online
+acquisition uses `python3 scripts/acquire_neighborhood.py --output NEW_DIRECTORY`;
+it is a new snapshot, not an exact replay of changing OSM data.

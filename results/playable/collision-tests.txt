@@ -1,0 +1,1 @@
+PASS: swept thin walls, radius clearance, boundaries, courtyard holes, concave notch, free movement, reset, no-spawn handling

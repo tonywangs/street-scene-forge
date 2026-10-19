@@ -27,6 +27,13 @@
   const center = min.map((v, i) => (v + max[i]) / 2);
   const extent = Math.max(...max.map((v, i) => v - min[i]), 10);
   let yaw = -.55, tilt = .70, zoom = 1, selected = -1, painted = [];
+  const projection = manifest.projection, bbox = manifest.bbox;
+  const metres = projection.radius_m * Math.PI / 180;
+  const halfX = (bbox[2]-bbox[0])*metres*Math.cos(projection.origin_lat*Math.PI/180)/2;
+  const halfZ = (bbox[3]-bbox[1])*metres/2;
+  const player = ForgePlayer.create(meshes, manifest.features, [-halfX,-halfZ,halfX,halfZ]);
+  let walking = false;
+  const keys = new Set();
   const rows = [];
   function select(index) {
     if (!manifest.features.length) return;
@@ -50,6 +57,8 @@
   $('filter').addEventListener('input', () => rows.forEach(r => {r.tr.hidden = !r.text.includes($('filter').value.toLowerCase());}));
   $('summary').textContent = `${meshes.length} features / ${manifest.totals.triangles.toLocaleString()} triangles`;
   $('attribution').textContent = manifest.attribution;
+  $('source-download').hidden = !manifest.source;
+  $('source-record').textContent = manifest.source ? JSON.stringify(manifest.source, null, 2) : '';
   $('provenance').textContent = JSON.stringify({input: manifest.input, projection: manifest.projection, bbox: manifest.bbox, limits: manifest.limits, source_relations: manifest.source_relations, assets: manifest.assets}, null, 2);
   $('omission-summary').textContent = `${manifest.diagnostics.length} source diagnostics (including consumed members)`;
   $('omissions').textContent = JSON.stringify({counts: manifest.omission_counts, diagnostics: manifest.diagnostics}, null, 2);
@@ -58,10 +67,11 @@
     canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.fillStyle = '#d4dfdc'; ctx.fillRect(0, 0, width, height);
-    const scale = Math.min(width, height) * .7 / extent * zoom;
+    const scale = Math.min(width, height) * .7 / (walking ? Math.min(extent,100) : extent) * zoom;
+    const focus = walking && player.state.position ? [player.state.position[0],0,player.state.position[1]] : center;
     const cy = Math.cos(yaw), sy = Math.sin(yaw), ct = Math.cos(tilt), st = Math.sin(tilt);
     function project(p) {
-      const x = p[0] - center[0], y = p[1] - center[1], z = p[2] - center[2];
+      const x = p[0] - focus[0], y = p[1] - focus[1], z = p[2] - focus[2];
       const u = x * cy - z * sy, v = x * sy + z * cy;
       return [width / 2 + u * scale, height / 2 + (v * st - y * ct) * scale, v * ct + y * st];
     }
@@ -86,6 +96,22 @@
       ctx.fillStyle = mi === selected ? '#edb75b' : road ? '#53666c' : '#8daa94';
       ctx.fill(); ctx.strokeStyle = mi === selected ? '#956922' : road ? '#53666c' : '#617d69'; ctx.lineWidth = .45; ctx.stroke();
     }
+    if (walking && player.state.position) {
+      const marker = (position, color, label) => {
+        const p=project([position[0],.1,position[1]]);
+        ctx.beginPath();ctx.ellipse(p[0],p[1],Math.max(6,player.radius*scale),Math.max(4,player.radius*scale*.7),0,0,Math.PI*2);
+        ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+        ctx.fillStyle='#10232d';ctx.font='bold 13px system-ui';ctx.fillText(label,p[0]+10,p[1]-10);
+      };
+      if(player.route) {
+        const a=project([player.route.start[0],.1,player.route.start[1]]), b=project([player.route.end[0],.1,player.route.end[1]]);
+        ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.strokeStyle='#c58b25';ctx.lineWidth=2;ctx.setLineDash([5,6]);ctx.stroke();ctx.setLineDash([]);
+        marker(player.route.end,'#ffc65e','Finish');
+      }
+      marker(player.state.position,'#1476db','You');
+      const st=player.state;
+      $('walk-status').textContent = `${st.reached ? 'Route complete! ' : ''}${st.distance.toFixed(1)} m walked · ${st.lastBlock ? 'Blocked by '+st.lastBlock : 'Buildings are solid'}${player.route ? ' · '+player.route.name : ''}`;
+    }
     ctx.fillStyle = '#273e38'; ctx.font = '12px system-ui';
     ctx.fillText(all.length ? 'Y up · metric scene · flat terrain' : 'No supported features in this extent', 16, 24);
     const north = project([center[0], center[1], center[2] - extent / 5]);
@@ -104,7 +130,45 @@
   $('left').onclick = () => move(-.2); $('right').onclick = () => move(.2);
   $('in').onclick = () => move(0, 1.2); $('out').onclick = () => move(0, 1/1.2); $('reset').onclick = reset;
   $('tilt').oninput = () => {tilt = Number($('tilt').value) * Math.PI / 180; draw();};
+  const inspectorHelp = $('help').textContent;
+  function setWalking(value) {
+    walking=value && !!player.state.position; keys.clear();
+    $('help').textContent = walking ? 'Hold WASD or arrows to walk · drag to orbit · scroll or +/− to zoom · Escape to inspect.' : inspectorHelp;
+    $('play').setAttribute('aria-pressed',String(walking));
+    $('play').textContent=walking ? 'Return to inspector' : 'Walk neighborhood';
+    document.body.classList.toggle('walking',walking);
+    if(value && !walking) $('walk-status').textContent='No safe spawn found in this extent.';
+    canvas.setAttribute('aria-label',walking ? 'Playable 3D neighborhood. Hold W A S D or arrows to walk, drag to orbit, Escape to inspect.' : 'Interactive 3D neighborhood inspector. Arrows orbit, plus and minus zoom.');
+    zoom=1;canvas.focus();draw();
+  }
+  $('play').onclick=()=>setWalking(!walking);
+  $('respawn').onclick=()=>{player.reset();setWalking(true);};
+  const movementKeys=new Set(['w','a','s','d','arrowup','arrowleft','arrowdown','arrowright']);
+  canvas.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+  canvas.addEventListener('blur',()=>keys.clear());
+  window.addEventListener('blur',()=>keys.clear());
+  document.addEventListener('visibilitychange',()=>keys.clear());
+  let lastTime=null;
+  function animate(time) {
+    const dt=lastTime===null ? 0 : Math.min((time-lastTime)/1000,.05);lastTime=time;
+    if(walking && keys.size) {
+      let right=Number(keys.has('d')||keys.has('arrowright'))-Number(keys.has('a')||keys.has('arrowleft'));
+      let forward=Number(keys.has('w')||keys.has('arrowup'))-Number(keys.has('s')||keys.has('arrowdown'));
+      const length=Math.hypot(right,forward);
+      if(length) {
+        right/=length;forward/=length;
+        player.move((right*Math.cos(yaw)-forward*Math.sin(yaw))*player.speed*dt,(-right*Math.sin(yaw)-forward*Math.cos(yaw))*player.speed*dt);
+        draw();
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+  // Read-only telemetry supports reproducing routes without a teleport/cheat API.
+  window.FORGE_WALK = Object.freeze({get state(){return player.state;},get route(){return player.route ? JSON.parse(JSON.stringify(player.route)) : null;},get yaw(){return yaw;},get walking(){return walking;}});
   canvas.addEventListener('keydown', e => {
+    if(walking && e.key==='Escape') {e.preventDefault();setWalking(false);return;}
+    if(walking && movementKeys.has(e.key.toLowerCase())) {e.preventDefault();keys.add(e.key.toLowerCase());return;}
     const actions = {ArrowLeft: () => move(-.15), ArrowRight: () => move(.15), ArrowUp: () => move(0,1,.08), ArrowDown: () => move(0,1,-.08), PageUp: () => move(0,1,.08), PageDown: () => move(0,1,-.08), '+': () => move(0,1.2), '=': () => move(0,1.2), '-': () => move(0,1/1.2), Home: reset, ']': () => select(selected+1), '[': () => select(selected-1)};
     if (actions[e.key]) {e.preventDefault(); actions[e.key]();}
   });
@@ -125,4 +189,5 @@
     drag=null;
   });
   new ResizeObserver(draw).observe(canvas); draw();
+  if(new URLSearchParams(location.search).get('walk')==='1') setWalking(true);
 })();

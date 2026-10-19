@@ -1,0 +1,65 @@
+{
+  "browser": "156.0.8078.4",
+  "route": {
+    "start": [
+      12.286326587200165,
+      52.1271427154541
+    ],
+    "end": [
+      80.48190087080002,
+      83.43078346252442
+    ],
+    "length": 93.7962742121491,
+    "id": "way/687804449",
+    "name": "way/687804449"
+  },
+  "start": {
+    "position": [
+      12.286326587200165,
+      52.1271427154541
+    ],
+    "distance": 0,
+    "hits": 0,
+    "lastBlock": null,
+    "reached": false
+  },
+  "finish": {
+    "position": [
+      78.70603199384016,
+      82.61562615912564
+    ],
+    "distance": 73.082999999999,
+    "hits": 0,
+    "lastBlock": null,
+    "reached": true
+  },
+  "collision": {
+    "position": [
+      -6.699653126382299,
+      -0.39216469061193554
+    ],
+    "distance": 55.88312547638907,
+    "hits": 18,
+    "lastBlock": "way/23853131",
+    "reached": false
+  },
+  "collisionTarget": {
+    "point": [
+      -10.272998809814453,
+      -10.463457425435385
+    ],
+    "id": "way/23853131",
+    "distance": 66.53199522308876
+  },
+  "checks": [
+    "offline file launch, no network or CSP errors",
+    "real extract attribution and acquisition displayed",
+    "keyboard route >50 m with zero collisions",
+    "building collision via keyboard",
+    "focus loss clears movement",
+    "restart and Escape",
+    "four visible screenshots"
+  ],
+  "errors": [],
+  "requests": []
+}
